@@ -1,5 +1,5 @@
 {
-  "name": "checkjs",
+  "name": "expressjs-check",
   "version": "1.0.0",
   "description": "A simple data validation library.",
   "main": "check.js",
