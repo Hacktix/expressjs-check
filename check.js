@@ -54,6 +54,8 @@ function isSpecified(value) {
 function check(input, res, pattern, callback = null) {
 	if(!isSpecified(pattern))
 		throw "InvalidArgumentsException: No pattern object provided";
+	if(!isSpecified(input))
+		input = {};
 
 	var results = validate(input, pattern);
 

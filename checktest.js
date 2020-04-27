@@ -92,6 +92,8 @@ finally {
         console.log(" [o] ".brightGreen + ("Passed test for check 'null arguments'").white);
 }
 
+doCheck("null data, empty pattern", null, {});
+doCheck("null data, filled pattern", null, {a:{type:"string", required:true}}, true);
 
 console.log("\n=== Results ===");
 console.log("Passed ".white + passed.toString().brightGreen + " out of ".white + checks.toString().brightGreen + " (".white + ((Math.floor((passed/checks)*10000)/100) + "%").brightGreen + ")\n".white);
