@@ -83,10 +83,10 @@ doCheck("nested, required, invalid", {a:{num:1,b:3.5}}, {a:{type:"object",patter
 
 console.log("\n === Syntax Errors ===");
 
-let nullArgPass = false;
-try { doCheck("null arguments", null, null); } catch(e) { passed++; nullArgPass = true; }
+let testvar = false;
+try { doCheck("null arguments", null, null); } catch(e) { passed++; testvar = true; }
 finally {
-    if(!nullArgPass)
+    if(!testvar)
         console.log(" [x] ".brightRed + ("Expected InvalidArgumentsException but got none for check 'null arguments'").white);
     else
         console.log(" [o] ".brightGreen + ("Passed test for check 'null arguments'").white);
@@ -94,6 +94,16 @@ finally {
 
 doCheck("null data, empty pattern", null, {});
 doCheck("null data, filled pattern", null, {a:{type:"string", required:true}}, true);
+doCheck("null data type", {a:1}, {a:{type:null}});
+
+testvar = false;
+try { doCheck("invalid data type", {a:1}, {a:{type:"something"}}); } catch(e) { passed++; testvar = true; }
+finally {
+    if(!testvar)
+        console.log(" [x] ".brightRed + ("Expected InvalidArgumentsException but got none for check 'invalid data type'").white);
+    else
+        console.log(" [o] ".brightGreen + ("Passed test for check 'invalid data type'").white);
+}
 
 console.log("\n=== Results ===");
 console.log("Passed ".white + passed.toString().brightGreen + " out of ".white + checks.toString().brightGreen + " (".white + ((Math.floor((passed/checks)*10000)/100) + "%").brightGreen + ")\n".white);

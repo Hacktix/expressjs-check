@@ -202,6 +202,8 @@ function validate(input, pattern, globalInput = null) {
 						return;
 					}
 					break;
+				default:
+					throw "InvalidArgumentsException: Unknown data type " + vPattern.type;
 			}
 		}
 	});
