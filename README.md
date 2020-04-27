@@ -1,16 +1,31 @@
-# check.js
+# expressjs-check
 **A simple library for data validation.**
 
-check.js allows pattern-based data validation. This build is specifically implemented to support expressJS functionalities, such as auto-respond with error messages.
+expressjs-check allows pattern-based data validation. This build is specifically implemented to support expressJS functionalities, such as auto-respond with error messages.
 
-## Installation / Testing
-In order to install check.js, simply clone the repository and enter the following command:
-```
-npm install
-```
-As soon as the installation process has finished you can run the provided test cases simply using
-```
-npm test
+## Installation and Setup
+You can install expressjs-check by simply entering the command `npm i expressjs-check`. Once it has installed you can use it in your Express app however you'd like. Below is a little example:
+
+```js
+const express = require('express');
+const app = express();
+const port = 3000;
+
+const checker = require('expressjs-check');
+
+app.get('/', (req, res) => {
+
+    // Check GET Parameters
+    if(checker.check(req.query, res, {
+        someString: {type:"string", required:true}
+    })) return;
+
+    // If parameter "someString" is passed
+    res.status(200);
+    res.send({ok:true});
+});
+
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 ```
 
 ## Pattern Documentation:
