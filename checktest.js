@@ -77,8 +77,7 @@ doCheck("required, invalid", {a:1,b:[]}, {a:{type:"number"}, b:{type:"string",re
 doCheck("not required, not given", {a:1}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===2"}});
 doCheck("not required, valid", {a:1,b:"abc"}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===2"}});
 doCheck("not required, invalid", {a:1,b:[]}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===2"}},true);
-doCheck("nested, required, not given", {a:{num:1}}, {a:{type:"object"}, b:{type:"string",requiredIf:"#a.num===1"}},true);
-doCheck("nested, not required, not given", {a:{num:1}}, {a:{type:"object"}, b:{type:"string",requiredIf:"#a.num===2"}});
+doCheck("nested, required, not given", {a:{num:1}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
 
 console.log("\n=== Results ===");
 console.log("Passed ".white + passed.toString().brightGreen + " out of ".white + checks.toString().brightGreen + " (".white + ((Math.floor((passed/checks)*10000)/100) + "%").brightGreen + ")\n".white);

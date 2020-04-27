@@ -66,11 +66,12 @@ function check(input, res, pattern, callback = null) {
 	return false;
 }
 
-function validate(input, pattern) {
+function validate(input, pattern, globalInput = null) {
 	let results = {}
 	Object.keys(pattern).forEach(key => {
 		let vPattern = pattern[key];
 		if(isSpecified(vPattern.requiredIf) && (typeof vPattern.requiredIf === "string")) {
+			if(globalInput === null) globalInput = input;
 			let parsed = "";
 			let inLiteral = false;
 			for(let i = 0; i < vPattern.requiredIf.length; i++) {
@@ -80,7 +81,10 @@ function validate(input, pattern) {
 					let varname = "";
 					while("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_".includes(vPattern.requiredIf[++i])) varname += vPattern.requiredIf[i];
 					i--;
-					parsed += "input['" + varname + "']";
+					if(Object.keys(globalInput).includes(varname))
+						parsed += "globalInput['" + varname + "']";
+					else
+						parsed += "false";
 				}
 				else parsed += c;
 			}
@@ -112,7 +116,7 @@ function validate(input, pattern) {
 						return;
 					}
 					if(isSpecified(vPattern.pattern) && typeof vPattern.pattern === "object") {
-						let recResults = validate(value, vPattern.pattern);
+						let recResults = validate(value, vPattern.pattern, globalInput === null ? input : globalInput);
 						Object.keys(recResults).forEach(r => results[r] = recResults[r]);
 					}
 					break;
