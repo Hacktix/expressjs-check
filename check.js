@@ -52,6 +52,9 @@ function isSpecified(value) {
 	}
 **/
 function check(input, res, pattern, callback = null) {
+	if(!isSpecified(pattern))
+		throw "InvalidArgumentsException: No pattern object provided";
+
 	var results = validate(input, pattern);
 
 	if (Object.keys(results).length > 0) {

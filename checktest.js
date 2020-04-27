@@ -78,6 +78,20 @@ doCheck("not required, not given", {a:1}, {a:{type:"number"}, b:{type:"string",r
 doCheck("not required, valid", {a:1,b:"abc"}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===2"}});
 doCheck("not required, invalid", {a:1,b:[]}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===2"}},true);
 doCheck("nested, required, not given", {a:{num:1}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
+doCheck("nested, required, valid", {a:{num:1,b:"abc"}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}});
+doCheck("nested, required, invalid", {a:{num:1,b:3.5}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
+
+console.log("\n === Syntax Errors ===");
+
+let nullArgPass = false;
+try { doCheck("null arguments", null, null); } catch(e) { passed++; nullArgPass = true; }
+finally {
+    if(!nullArgPass)
+        console.log(" [x] ".brightRed + ("Expected InvalidArgumentsException but got none for check 'null arguments'").white);
+    else
+        console.log(" [o] ".brightGreen + ("Passed test for check 'null arguments'").white);
+}
+
 
 console.log("\n=== Results ===");
 console.log("Passed ".white + passed.toString().brightGreen + " out of ".white + checks.toString().brightGreen + " (".white + ((Math.floor((passed/checks)*10000)/100) + "%").brightGreen + ")\n".white);
