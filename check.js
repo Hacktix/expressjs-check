@@ -138,7 +138,7 @@ function validate(input, pattern, globalInput = null) {
 						results[key] = { error: "Value is too long." };
 						return;
 					}
-					if (isSpecified(vPattern.regex) && !(new RegExp(vPattern.regex).test(value))) {
+					if (isSpecified(vPattern.regex) && (value.match(new RegExp(vPattern.regex)) === null || value.match(new RegExp(vPattern.regex)).join("") !== value)) {
 						results[key] = { error: "Value is not in the correct format." };
 						return;
 					}

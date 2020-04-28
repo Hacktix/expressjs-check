@@ -76,6 +76,26 @@ doCheck("null - required", {a:null}, {a:{type:"integer", required:true}}, true);
 doCheck("null - allowed", {a:null}, {a:{type:"integer", required:true, allowNull:true}});
 doCheck("Infinity", {a:Infinity}, {a:{type:"integer"}}, true);
 
+console.log("\n=== String Type ===");
+doCheck("Integer", {a:1}, {a:{type:"string"}}, true);
+doCheck("Float", {a:1.5}, {a:{type:"string"}}, true);
+doCheck("String", {a:"abc"}, {a:{type:"string"}});
+doCheck("undefined - not required", {a:undefined}, {a:{type:"string"}});
+doCheck("null - not required", {a:null}, {a:{type:"string"}});
+doCheck("undefined - required", {a:undefined}, {a:{type:"string", required:true}}, true);
+doCheck("null - required", {a:null}, {a:{type:"string", required:true}}, true);
+doCheck("null - allowed", {a:null}, {a:{type:"string", required:true, allowNull:true}});
+doCheck("Infinity", {a:Infinity}, {a:{type:"string"}}, true);
+doCheck("Below minLength", {a:"abc"}, {a:{type:"string",minLength:5}},true);
+doCheck("Above minLength", {a:"abcdefg"}, {a:{type:"string",minLength:5}});
+doCheck("Exactly minLength", {a:"abcde"}, {a:{type:"string",minLength:5}});
+doCheck("Below maxLength", {a:"abc"}, {a:{type:"string",maxLength:5}});
+doCheck("Above maxLength", {a:"abcdefg"}, {a:{type:"string",maxLength:5}},true);
+doCheck("Exactly maxLength", {a:"abcde"}, {a:{type:"string",maxLength:5}});
+doCheck("Number regex - match", {a:"12345"}, {a:{type:"string",regex:"\\d+"}});
+doCheck("Number regex - partial mismatch", {a:"a12345"}, {a:{type:"string",regex:"\\d+"}},true);
+doCheck("Number regex - full mismatch", {a:"abc"}, {a:{type:"string",regex:"\\d+"}},true);
+
 console.log("\n=== Object Type ===");
 doCheck("Number", {a:1}, {a:{type:"object"}}, true);
 doCheck("String", {a:"abc"}, {a:{type:"object"}}, true);
