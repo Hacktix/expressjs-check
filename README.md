@@ -1,6 +1,9 @@
 # expressjs-check
 **A simple library for data validation.**
 
+![npm](https://img.shields.io/npm/v/expressjs-check)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/expressjs-check)
+
 expressjs-check allows pattern-based data validation. This build is specifically implemented to support expressJS functionalities, such as auto-respond with error messages.
 
 ## Installation and Setup
