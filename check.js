@@ -150,7 +150,7 @@ function validate(input, pattern, globalInput = null) {
 					}
 					break;
 				case "date":
-					if (new Date(value).toString() === "Invalid Date") {
+					if (typeof value === "boolean" || new Date(value).toString() === "Invalid Date") {
 						results[key] = { error: "Value is not a valid date." };
 						return;
 					}

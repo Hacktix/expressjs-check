@@ -80,6 +80,7 @@ console.log("\n=== String Type ===");
 doCheck("Integer", {a:1}, {a:{type:"string"}}, true);
 doCheck("Float", {a:1.5}, {a:{type:"string"}}, true);
 doCheck("String", {a:"abc"}, {a:{type:"string"}});
+doCheck("Boolean", {a:true}, {a:{type:"string"}},true)
 doCheck("undefined - not required", {a:undefined}, {a:{type:"string"}});
 doCheck("null - not required", {a:null}, {a:{type:"string"}});
 doCheck("undefined - required", {a:undefined}, {a:{type:"string", required:true}}, true);
@@ -95,6 +96,32 @@ doCheck("Exactly maxLength", {a:"abcde"}, {a:{type:"string",maxLength:5}});
 doCheck("Number regex - match", {a:"12345"}, {a:{type:"string",regex:"\\d+"}});
 doCheck("Number regex - partial mismatch", {a:"a12345"}, {a:{type:"string",regex:"\\d+"}},true);
 doCheck("Number regex - full mismatch", {a:"abc"}, {a:{type:"string",regex:"\\d+"}},true);
+doCheck("Email regex - match", {a:"example@example.com"}, {a:{type:"string",regex:".+@.+\\..+"}});
+doCheck("Email regex - partial mismatch", {a:"example@example"}, {a:{type:"string",regex:".+@.+\\..+"}},true);
+doCheck("Email regex - full mismatch", {a:"17932"}, {a:{type:"string",regex:".+@.+\\..+"}},true);
+
+console.log("\n=== Boolean Type ===");
+doCheck("Integer", {a:1}, {a:{type:"boolean"}}, true);
+doCheck("Float", {a:1.5}, {a:{type:"boolean"}}, true);
+doCheck("String", {a:"abc"}, {a:{type:"boolean"}},true);
+doCheck("Boolean - true", {a:true}, {a:{type:"boolean"}});
+doCheck("Boolean - false", {a:false}, {a:{type:"boolean"}});
+doCheck("undefined - not required", {a:undefined}, {a:{type:"boolean"}});
+doCheck("null - not required", {a:null}, {a:{type:"boolean"}});
+doCheck("undefined - required", {a:undefined}, {a:{type:"boolean", required:true}}, true);
+doCheck("null - required", {a:null}, {a:{type:"boolean", required:true}}, true);
+doCheck("null - allowed", {a:null}, {a:{type:"boolean", required:true, allowNull:true}});
+doCheck("Infinity", {a:Infinity}, {a:{type:"boolean"}}, true);
+
+console.log("\n=== Date Type ===");
+doCheck("Integer", {a:1}, {a:{type:"date"}}, true);
+doCheck("Float", {a:1.5}, {a:{type:"date"}}, true);
+doCheck("String", {a:"abc"}, {a:{type:"date"}},true);
+doCheck("Boolean - true", {a:true}, {a:{type:"date"}},true);
+doCheck("Boolean - false", {a:false}, {a:{type:"date"}},true);
+doCheck("Current Date", {a:new Date()}, {a:{type:"date"}});
+doCheck("Timestamp - allowed", {a:0}, {a:{type:"date",allowTimestamp:true}});
+doCheck("Timestamp - disallowed", {a:0}, {a:{type:"date",allowTimestamp:false}},true);
 
 console.log("\n=== Object Type ===");
 doCheck("Number", {a:1}, {a:{type:"object"}}, true);
