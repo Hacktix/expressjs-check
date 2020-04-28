@@ -122,6 +122,14 @@ doCheck("Boolean - false", {a:false}, {a:{type:"date"}},true);
 doCheck("Current Date", {a:new Date()}, {a:{type:"date"}});
 doCheck("Timestamp - allowed", {a:0}, {a:{type:"date",allowTimestamp:true}});
 doCheck("Timestamp - disallowed", {a:0}, {a:{type:"date",allowTimestamp:false}},true);
+doCheck("Date below min", {a:new Date(0)}, {a:{type:"date",min:new Date()}},true);
+doCheck("Date above min", {a:new Date()}, {a:{type:"date",min:new Date(0)}});
+doCheck("Date below max", {a:new Date(0)}, {a:{type:"date",max:new Date()}});
+doCheck("Date above max", {a:new Date()}, {a:{type:"date",max:new Date(0)}},true);
+doCheck("Timestamp below min", {a:0}, {a:{type:"date",min:new Date(),allowTimestamp:true}},true);
+doCheck("Timestamp above min", {a:99999999999}, {a:{type:"date",min:new Date(0),allowTimestamp:true}});
+doCheck("Timestamp below max", {a:0}, {a:{type:"date",max:new Date(),allowTimestamp:true}});
+doCheck("Timestamp above max", {a:99999999999}, {a:{type:"date",max:new Date(0),allowTimestamp:true}},true);
 
 console.log("\n=== Object Type ===");
 doCheck("Number", {a:1}, {a:{type:"object"}}, true);
