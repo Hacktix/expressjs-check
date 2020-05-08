@@ -35,9 +35,20 @@ app.listen(port, () => console.log(`Example app listening at http://localhost:${
 Patterns are JSON Objects defining a certain format of values that should be checked. Every key in the pattern object represents a key of the same name in the check-object. The check() function returns false if all given parameters are valid, true otherwise.
 
 ### Required Parameters
-Values can be set as required using `required:true`. If `null` should be allowed, `allowNull:true` must be set. Values can be set as required conditionally by using the `requiredIf` attribute. This allows for a JS-string to be passed that evaluates to either true or false, deciding whether or not the value is required. Other values in the object can be accessed using `#keyname`, for example:
+Values can be set as required using `required:true`.
+If `null` should be allowed, `allowNull:true` must be set.
+
+Values can be set as required conditionally by using the `requiredIf` attribute. This allows for a JS-string to be passed that evaluates to either true or false, deciding whether or not the value is required. Other values in the object can be accessed using `#keyname`, for example:
 
 `'#somenumber === 1'` will make the value required if the value `somenumber` is equal to 1.
+
+### List of Valid Parameters
+A pattern can contain a list of valid parameters in form of an array. The following is a pattern which would allow the property `a` of the input object to be one of the numbers `1`, `1.5` or `2`:
+
+`{ a: { type:"number", possibleValues:[1, 1.5, 2] } }`
+
+All data types except for Objects are compared using the `===` operand. If the value is within the range of possible values, all other pattern attributes (such as for example `min` or `max`) still apply.
+Objects are recursively compared, as the `===` operator does not guarantee equality if both values are objects.
 
 ### Data Types
 Data Types can be checked using the `type` key in the pattern. Supported Types are as follows:

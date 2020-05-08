@@ -6,6 +6,26 @@ function isSpecified(value) {
 	return value !== undefined && value !== null;
 }
 
+function compareValues(o1, o2) {
+	if(typeof o1 !== typeof o2)
+		return false;
+	if(typeof o1 !== "object")
+		return o1 === o2;
+	return compareObject(o1, o2);
+}
+
+function compareObject(o1, o2) {
+	if(Object.keys(o1).length !== Object.keys(o2).length)
+		return false;
+	for(let i = 0; i < Object.keys(o1).length; i++) {
+		if(Object.keys(o1)[i] !== Object.keys(o2)[i])
+			return false;
+		if(!compareValues(o1[Object.keys(o1)[i]], o2[Object.keys(o1)[i]]))
+			return false;
+	}
+	return true;
+}
+
 /**
 # Pattern Documentation:
   Patterns are JSON Objects defining a certain format of values that should be checked.
@@ -113,6 +133,21 @@ function validate(input, pattern, globalInput = null) {
 		}
 
 		let value = input[key];
+
+		if(isSpecified(vPattern.possibleValues)) {
+			let inValidRange = false;
+			for(let i = 0; i < vPattern.possibleValues.length; i++) {
+				if(compareValues(vPattern.possibleValues[i], value)) {
+					inValidRange = true;
+					break;
+				}
+			}
+			if(!inValidRange) {
+				results[key] = { error: "Value is not in the list of valid values." };
+				return;
+			}
+		}
+
 		if (isSpecified(vPattern.type)) {
 			switch (vPattern.type) {
 				case "object":

@@ -153,6 +153,18 @@ doCheck("nested, required, not given", {a:{num:1}}, {a:{type:"object",pattern:{b
 doCheck("nested, required, valid", {a:{num:1,b:"abc"}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}});
 doCheck("nested, required, invalid", {a:{num:1,b:3.5}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
 
+console.log("\n=== PossibleValues ===");
+doCheck("Not given, not required", {}, {a:{type:"number", possibleValues:[1,2,3]}});
+doCheck("Not given, required", {}, {a:{type:"number", required:true, possibleValues:[1,2,3]}}, true);
+doCheck("Valid", {a:1}, {a:{type:"number", possibleValues:[1,2,3]}});
+doCheck("Invalid", {a:0}, {a:{type:"number", possibleValues:[1,2,3]}},true);
+doCheck("Wrong data type", {a:0}, {a:{type:"string", possibleValues:[1,2,3]}},true);
+doCheck("Object, valid", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1}]}});
+doCheck("Object, invalid - different values", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:2}]}}, true);
+doCheck("Object, invalid - different keys", {a:{a:1}}, {a:{type:"object", possibleValues:[{b:1}]}}, true);
+doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
+doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
+
 console.log("\n=== Syntax Errors ===");
 
 doExceptionCheck("null arguments", null, null, true, "InvalidArgumentsException");
