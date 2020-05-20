@@ -134,6 +134,21 @@ function validate(input, pattern, globalInput = null) {
 							return;
 						}
 					}
+					if(isSpecified(vPattern.fixedLength)) {
+						if(value.length != vPattern.fixedLength) {
+							results[key] = { error: "Value contains incorrect amount of items." };
+							return;
+						}
+					} else {
+						if (isSpecified(vPattern.minLength) && value.length < vPattern.minLength) {
+							results[key] = { error: "Value contains too little items." };
+							return;
+						}
+						if (isSpecified(vPattern.maxLength) && value.length > vPattern.maxLength) {
+							results[key] = { error: "Value contains too many items." };
+							return;
+						}
+					}
 					break;
 				case "object":
 					if (typeof value !== "object") {

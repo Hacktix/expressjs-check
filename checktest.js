@@ -161,6 +161,15 @@ doCheck("Empty Array", {a:[]}, {a:{type:"array"}});
 doCheck("Filled Array", {a:[1,2,3]}, {a:{type:"array"}});
 doCheck("Array with Pattern - match", {a:[1,2,3]}, {a:{type:"array", pattern:{type:"number"}}});
 doCheck("Array with Pattern - mismatch", {a:[1,2,3]}, {a:{type:"array", pattern:{type:"string"}}},true);
+doCheck("Below minLength", {a:[1]}, {a:{type:"array",minLength:2}},true);
+doCheck("Above minLength", {a:[1,2,3]}, {a:{type:"array",minLength:2}});
+doCheck("Exactly minLength", {a:[1,2]}, {a:{type:"array",minLength:2}});
+doCheck("Below maxLength", {a:[1]}, {a:{type:"array",maxLength:2}});
+doCheck("Above maxLength", {a:[1,2,3]}, {a:{type:"array",maxLength:2}},true);
+doCheck("Exactly maxLength", {a:[1,2]}, {a:{type:"array",maxLength:2}});
+doCheck("Below fixedLength", {a:[1]}, {a:{type:"array",fixedLength:2}},true);
+doCheck("Above fixedLength", {a:[1,2,3]}, {a:{type:"array",fixedLength:2}},true);
+doCheck("Exactly fixedLength", {a:[1,2]}, {a:{type:"array",fixedLength:2}});
 
 console.log("\n=== RequiredIf ===");
 doCheck("required, not given", {a:1}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===1"}}, true);
