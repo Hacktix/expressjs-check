@@ -102,6 +102,9 @@ doCheck("Number regex - full mismatch", {a:"abc"}, {a:{type:"string",regex:"\\d+
 doCheck("Email regex - match", {a:"example@example.com"}, {a:{type:"string",regex:".+@.+\\..+"}});
 doCheck("Email regex - partial mismatch", {a:"example@example"}, {a:{type:"string",regex:".+@.+\\..+"}},true);
 doCheck("Email regex - full mismatch", {a:"17932"}, {a:{type:"string",regex:".+@.+\\..+"}},true);
+doCheck("Time regex - match", {a:"10:10"}, {a:{type:"string",regex:"([0-1][0-9]|2[0-3]):[0-5][0-9]"}});
+doCheck("Time regex - partial mismatch", {a:"10:aaaaaaa"}, {a:{type:"string",regex:"([0-1][0-9]|2[0-3]):[0-5][0-9]"}},true);
+doCheck("Time regex - full mismatch", {a:"abcdefg"}, {a:{type:"string",regex:"([0-1][0-9]|2[0-3]):[0-5][0-9]"}},true);
 
 console.log("\n=== Boolean Type ===");
 doCheck("Integer", {a:1}, {a:{type:"boolean"}}, true);

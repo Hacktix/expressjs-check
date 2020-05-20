@@ -135,7 +135,7 @@ function validate(input, pattern, globalInput = null) {
 							return;
 						}
 					}
-					if (isSpecified(vPattern.regex) && (value.match(new RegExp(vPattern.regex)) === null || value.match(new RegExp(vPattern.regex)).join("") !== value)) {
+					if (isSpecified(vPattern.regex) && (value.match(new RegExp(vPattern.regex)) === null || value.match(new RegExp(vPattern.regex))[0] !== value)) {
 						results[key] = { error: "Value is not in the correct format." };
 						return;
 					}
