@@ -52,10 +52,19 @@ Objects are recursively compared, as the `===` operator does not guarantee equal
 
 ### Data Types
 Data Types can be checked using the `type` key in the pattern. Supported Types are as follows:
+ * `object`
+   - `pattern` : Allows for a recursive object check using a seperate pattern. `requiredIf` variables will still only reference the global object, however
+ * `array`
+   - `pattern` : Pattern that must apply to every item within the array
+   - `minLength` : Minimum amount of items in the array
+   - `maxLength` : Maximum amount of items in the array
+   - `fixedLength` : Fixed amount of items in the array (overwrites `minLength` and `maxLength`)
  * `string`
    - `minLength` : Minimum length of the string
    - `maxLength` : Maximum length of the string
+   - `fixedLength` : Fixed length of the string (overwrites `minLength` and `maxLength`)
    - `regex` : Regular Expression the string needs to match (passed as a string)
+   - `regexFlags` : Flags to be used with the given regex, as single characters (Example: `"gm"` for global + multiline)
  * `boolean`
  * `date`
    - `min` : Earliest possible date
@@ -85,5 +94,26 @@ Data Types can be checked using the `type` key in the pattern. Supported Types a
 		type: 'string',
 		regex: '.+@.+\..+'
 	}
+}
+
+// Use of multiple features of expressjs-check
+{
+    mail: {
+      type: "object",
+      required: true,
+      pattern: {
+        enabled: { type: "boolean", required: true },
+        delay: {
+          type: "object",
+          requiredIf: "#mail.enabled",
+          pattern: {
+            days: { type: "number", required: true, min: 0 },
+            months: { type: "number", required: true, min: 0 }
+          },
+        },
+        time: { type: "string", regex: "([0-1][0-9]|2[0-3]):[0-5][0-9]" },
+        weekday: { type: "integer", min: 0, max: 7 }
+      }
+    }
 }
 ```
