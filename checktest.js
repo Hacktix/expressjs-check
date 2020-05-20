@@ -150,6 +150,18 @@ doCheck("Nested Pattern - Valid", {a:{a:1,b:"abc",c:{}}}, {a:{type:"object",patt
 doCheck("Double Nested Pattern - Invalid", {a:{a:{a:"abc"}}}, {a:{type:"object",pattern:{a:{type:"object",pattern:{a:{type:"number"}}}}}}, true);
 doCheck("Double Nested Pattern - Valid", {a:{a:{a:1}}}, {a:{type:"object",pattern:{a:{type:"object",pattern:{a:{type:"number"}}}}}});
 
+console.log("\n=== Array Type ===");
+doCheck("Number", {a:1}, {a:{type:"array"}}, true);
+doCheck("String", {a:"abc"}, {a:{type:"array"}}, true);
+doCheck("Function", {a:console.log}, {a:{type:"array"}}, true);
+doCheck("Empty Object", {a:{}}, {a:{type:"array"}},true);
+doCheck("Filled Object", {a:{a:1,b:2,c:3}}, {a:{type:"array"}},true);
+doCheck("Almost-array Object", {a:{"0":1,"1":2,"3":3}}, {a:{type:"array"}},true);
+doCheck("Empty Array", {a:[]}, {a:{type:"array"}});
+doCheck("Filled Array", {a:[1,2,3]}, {a:{type:"array"}});
+doCheck("Array with Pattern - match", {a:[1,2,3]}, {a:{type:"array", pattern:{type:"number"}}});
+doCheck("Array with Pattern - mismatch", {a:[1,2,3]}, {a:{type:"array", pattern:{type:"string"}}},true);
+
 console.log("\n=== RequiredIf ===");
 doCheck("required, not given", {a:1}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===1"}}, true);
 doCheck("required, valid", {a:1,b:"abc"}, {a:{type:"number"}, b:{type:"string",requiredIf:"#a===1"}});

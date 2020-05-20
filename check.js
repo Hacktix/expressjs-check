@@ -105,6 +105,36 @@ function validate(input, pattern, globalInput = null) {
 
 		if (isSpecified(vPattern.type)) {
 			switch (vPattern.type) {
+				case "array":
+					if (typeof value !== "object") {
+						results[key] = { error: "Value is not an array." };
+						return;
+					}
+					if(Object.keys(value).length == 0) {
+						if(!isSpecified(value.length)) {
+							results[key] = { error: "Value is not an array." };
+							return;
+						}
+					}
+					let lastIndex = -1;
+					for(let i = 0; i < Object.keys(value).length; i++) {
+						if(!isNumber(Object.keys(value)[i]) || parseInt(Object.keys(value)[i]) - 1 != lastIndex) {
+							results[key] = { error: "Value is not an array." };
+							return;
+						} else
+							lastIndex = parseInt(Object.keys(value)[i]);
+					}
+					if(isSpecified(vPattern.pattern) && typeof vPattern.pattern === "object") {
+						let newPattern = {};
+						for(let i = 0; i < value.length; i++)
+							newPattern[i] = vPattern.pattern;
+						let arrResults = validate(value, newPattern, globalInput === null ? input : globalInput);
+						if(Object.keys(arrResults).length > 0) {
+							results[key] = { error: "At least one array item does not fit pattern." };
+							return;
+						}
+					}
+					break;
 				case "object":
 					if (typeof value !== "object") {
 						results[key] = { error: "Value is not an object." };
