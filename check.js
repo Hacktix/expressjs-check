@@ -26,51 +26,6 @@ function compareObject(o1, o2) {
 	return true;
 }
 
-/**
-# Pattern Documentation:
-  Patterns are JSON Objects defining a certain format of values that should be checked.
-  Every key in the pattern object represents a key of the same name in the check-object.
-  The check() function returns false if all given parameters are valid, true otherwise.
-
-  Values can be set as required using 'required:true'. If 'null' should be allowed, 'allowNull:true' must be set.
-  Values can be set as required conditionally by using the 'requiredIf' attribute. This allows for a JS-string to be passed that evaluates to
-  either true or false, deciding whether or not the value is required. Other values in the object can be accessed using '#keyname', for example:
-  '#somenumber === 1' will make the value required if the value 'somenumber' is equal to 1.
-  
-  Data Types can be checked using the 'type' key in the pattern. Supported Types are as follows:
- * 'string'
-   - 'minLength' : Minimum length of the string
-   - 'maxLength' : Maximum length of the string
-   - 'regex'     : Regular Expression the string needs to match (passed as a string)
- * 'boolean'
- * 'date'
-   - 'min'            : Earliest possible date
-   - 'max'            : Latest possible date
-   - 'allowTimestamp' : Allows Numbers to be passed as timestamps
- * 'number'
-   - 'min'      : Minimum value
-   - 'max'      : Maximum value
-   - 'precison' : Maximum amount of allowed decimal places
- * 'integer'
-   Same attributes as 'number', but does not allow decimal places.
-# Example Patterns:
-	* Check for a valid number larger than or equal to 10:
-	{
-		testNumber: {
-			required: true,
-			type: 'number',
-			min: 10
-		}
-	}
-	* Check for a simple Email address string:
-	{
-		email: {
-			required: true,
-			type: 'string',
-			regex: '.+@.+\..+'
-		}
-	}
-**/
 function check(input, res, pattern, callback = null) {
 	if(!isSpecified(pattern))
 		throw "InvalidArgumentsException: No pattern object provided";
@@ -165,13 +120,20 @@ function validate(input, pattern, globalInput = null) {
 						results[key] = { error: "Value is not a string." };
 						return;
 					}
-					if (isSpecified(vPattern.minLength) && value.length < vPattern.minLength) {
-						results[key] = { error: "Value is too short." };
-						return;
-					}
-					if (isSpecified(vPattern.maxLength) && value.length > vPattern.maxLength) {
-						results[key] = { error: "Value is too long." };
-						return;
+					if(isSpecified(vPattern.fixedLength)) {
+						if(value.length != vPattern.fixedLength) {
+							results[key] = { error: "Value is not of correct length." };
+							return;
+						}
+					} else {
+						if (isSpecified(vPattern.minLength) && value.length < vPattern.minLength) {
+							results[key] = { error: "Value is too short." };
+							return;
+						}
+						if (isSpecified(vPattern.maxLength) && value.length > vPattern.maxLength) {
+							results[key] = { error: "Value is too long." };
+							return;
+						}
 					}
 					if (isSpecified(vPattern.regex) && (value.match(new RegExp(vPattern.regex)) === null || value.match(new RegExp(vPattern.regex)).join("") !== value)) {
 						results[key] = { error: "Value is not in the correct format." };
