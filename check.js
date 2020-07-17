@@ -1,9 +1,19 @@
+const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision"]
+
 function isNumber(num) {
     return !isNaN(parseFloat(num)) && !isNaN(num) && !(num - 1 === num);
 }
 
 function isSpecified(value) {
 	return value !== undefined && value !== null;
+}
+
+function checkPatternKeys(pattern) {
+	Object.keys(pattern).forEach(key => {
+		if(!patternKeys.includes(key)) {
+			console.log("[WARNING : expressjs-check] Encountered unknown key '" + key + "' in check pattern. Possibly a typo?");
+		}
+	});
 }
 
 function compareValues(o1, o2) {
@@ -50,6 +60,7 @@ function validate(input, pattern, globalInput = null) {
 	let results = {}
 	Object.keys(pattern).forEach(key => {
 		let vPattern = pattern[key];
+		checkPatternKeys(vPattern);
 		if(isSpecified(vPattern.requiredIf) && (typeof vPattern.requiredIf === "string")) {
 			if(globalInput === null) globalInput = input;
 			let parsed = "";
