@@ -72,7 +72,7 @@ function validate(input, pattern, globalInput = null) {
 					let varname = "";
 					while("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_".includes(vPattern.requiredIf[++i])) varname += vPattern.requiredIf[i];
 					i--;
-					if(Object.keys(globalInput).includes(varname))
+					if(Object.getOwnPropertyDescriptor(globalInput, varname) !== undefined && typeof Object.getOwnPropertyDescriptor(globalInput, varname).value !== "function" && Object.getOwnPropertyDescriptor(globalInput, varname).get === undefined)
 						parsed += "globalInput['" + varname + "']";
 					else
 						parsed += "false";

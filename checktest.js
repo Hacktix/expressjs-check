@@ -181,6 +181,7 @@ doCheck("not required, invalid", {a:1,b:[]}, {a:{type:"number"}, b:{type:"string
 doCheck("nested, required, not given", {a:{num:1}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
 doCheck("nested, required, valid", {a:{num:1,b:"abc"}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}});
 doCheck("nested, required, invalid", {a:{num:1,b:3.5}}, {a:{type:"object",pattern:{b:{type:"string",requiredIf:"#a.num===1"}}}},true);
+doCheck("RCE", {get a() { console.log("RCE") }}, {b: {requiredIf:"#a"}});
 
 console.log("\n=== PossibleValues ===");
 doCheck("Not given, not required", {}, {a:{type:"number", possibleValues:[1,2,3]}});
