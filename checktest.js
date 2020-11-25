@@ -16,6 +16,26 @@ function doCheck(title, input, pattern, expected = false) {
     }
 }
 
+function doResultCheck(title, input, pattern, expectedInput, expected = false) {
+    checks++;
+    let r = check(input, res, pattern);
+    if(r != expected) console.log(" [x] ".brightRed + ("Expected " + expected + " but got " + r + " for check '" + title + "'").white);
+    else {
+        let ei = true;
+        for(let key in expectedInput) {
+            if(input[key] !== expectedInput[key]) {
+                console.log(" [x] ".brightRed + ("Expected " + expectedInput[key] + " for key " + key + " but got " + input[key] + " for check '" + title + "'").white);
+                ei = false;
+                break;
+            }
+        }
+        if(ei) {
+            console.log(" [o] ".brightGreen + ("Passed test for check '" + title + "'").white);
+            passed++;
+        }
+    }
+}
+
 function doExceptionCheck(title, input, pattern, expected = false, exceptionType = "Exception") {
     checks++;
     let r = false;
@@ -195,8 +215,11 @@ doCheck("Object, invalid - different keys", {a:{a:1}}, {a:{type:"object", possib
 doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
 doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
 
-console.log("\n=== Syntax Errors ===");
+console.log("\n=== Default ===");
+doResultCheck("Basic, use default", {a: null}, {a:{type:"integer", default:1}}, {a:1});
+doResultCheck("Basic, don't use default", {a: 2}, {a:{type:"integer", default:1}}, {a:2});
 
+console.log("\n=== Syntax Errors ===");
 doExceptionCheck("null arguments", null, null, true, "InvalidArgumentsException");
 doCheck("null data, empty pattern", null, {});
 doCheck("null data, filled pattern", null, {a:{type:"string", required:true}}, true);

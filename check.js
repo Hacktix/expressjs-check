@@ -1,4 +1,4 @@
-const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision"]
+const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision", "default"]
 
 function isNumber(num) {
     return !isNaN(parseFloat(num)) && !isNaN(num) && !(num - 1 === num);
@@ -14,6 +14,9 @@ function checkPatternKeys(pattern) {
 			console.log("[WARNING : expressjs-check] Encountered unknown key '" + key + "' in check pattern. Possibly a typo?");
 		}
 	});
+	if(isSpecified(pattern.required) && pattern.required === true && Object.keys(pattern).includes("default")) {
+		console.log("[WARNING : expressjs-check] Default value provided for required parameter - Default value will never be used.");
+	}
 }
 
 function compareValues(o1, o2) {
@@ -87,15 +90,18 @@ function validate(input, pattern, globalInput = null) {
 					return;
 				} else return;
 			}
-		} else {
-			if (!isSpecified(input[key])) {
-				if (input[key] === null && vPattern.allowNull)
-					return;
-				if (vPattern.required) {
-					results[key] = { ok: false, error: "Required attribute not specified." };
-				}
+		} else if (!isSpecified(input[key])) {
+			if (input[key] === null && vPattern.allowNull) {
+				if(Object.keys(vPattern).includes("default"))
+					input[key] = vPattern.default;
 				return;
 			}
+			if (vPattern.required) {
+				results[key] = { ok: false, error: "Required attribute not specified." };
+			}
+			if(Object.keys(vPattern).includes("default"))
+				input[key] = vPattern.default;
+			return;
 		}
 
 		let value = input[key];

@@ -42,6 +42,13 @@ Values can be set as required conditionally by using the `requiredIf` attribute.
 
 `'#somenumber === 1'` will make the value required if the value `somenumber` is equal to 1.
 
+### Default Values
+Not-required values can be set to a specified default value by using the `default` attribute:
+
+`{ a: { type:"number", default: 5 } }`
+
+The example above would insert the value `5` in the `a` key of the input object if it initially contained `null` or `undefined`. If a value is provided in the input all checks are still run as normal and the original value is not overwritten.
+
 ### List of Valid Parameters
 A pattern can contain a list of valid parameters in form of an array. The following is a pattern which would allow the property `a` of the input object to be one of the numbers `1`, `1.5` or `2`:
 
