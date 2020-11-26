@@ -68,6 +68,8 @@ Data Types can be checked using the `type` key in the pattern. Supported Types a
    - `minLength` : Minimum amount of items in the array
    - `maxLength` : Maximum amount of items in the array
    - `fixedLength` : Fixed amount of items in the array (overwrites `minLength` and `maxLength`)
+   - `noDuplicates` : If set to `true`, only arrays containing no duplicate values are allowed.
+   - `removeDuplicates` : If set to `true`, the check acts similarly to `noDuplicates` explained above. However, instead of returning an error, the checker removes all duplicate values from the passed object.
  * `string`
    - `minLength` : Minimum length of the string
    - `maxLength` : Maximum length of the string

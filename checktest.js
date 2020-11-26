@@ -23,7 +23,7 @@ function doResultCheck(title, input, pattern, expectedInput, expected = false) {
     else {
         let ei = true;
         for(let key in expectedInput) {
-            if(input[key] !== expectedInput[key]) {
+            if(!compareValues(input[key], expectedInput[key])) {
                 console.log(" [x] ".brightRed + ("Expected " + expectedInput[key] + " for key " + key + " but got " + input[key] + " for check '" + title + "'").white);
                 ei = false;
                 break;
@@ -51,6 +51,26 @@ function doExceptionCheck(title, input, pattern, expected = false, exceptionType
         console.log(" [o] ".brightGreen + ("Passed test for check '" + title + "'").white);
         passed++;
     }
+}
+
+function compareValues(o1, o2) {
+	if(typeof o1 !== typeof o2)
+		return false;
+	if(typeof o1 !== "object" || o1 === null || o2 === null)
+        return o1 === o2;
+	return compareObject(o1, o2);
+}
+
+function compareObject(o1, o2) {
+	if(Object.keys(o1).length !== Object.keys(o2).length)
+		return false;
+	for(let i = 0; i < Object.keys(o1).length; i++) {
+		if(Object.keys(o1)[i] !== Object.keys(o2)[i])
+			return false;
+		if(!compareValues(o1[Object.keys(o1)[i]], o2[Object.keys(o1)[i]]))
+			return false;
+	}
+	return true;
 }
 
 console.log("\n=== Number Type ===");
@@ -214,6 +234,22 @@ doCheck("Object, invalid - different values", {a:{a:1}}, {a:{type:"object", poss
 doCheck("Object, invalid - different keys", {a:{a:1}}, {a:{type:"object", possibleValues:[{b:1}]}}, true);
 doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
 doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
+
+console.log("\n=== removeDuplicates / noDuplicates ===");
+doCheck("No duplicates, duplicate check off", {a: [1,2,3]}, {a:{type:"array"}});
+doCheck("Duplicates, duplicate check off", {a: [1,1,1]}, {a:{type:"array"}});
+doCheck("No duplicates, duplicate check on", {a: [1,2,3]}, {a:{type:"array", noDuplicates: true}});
+doCheck("Duplicates, duplicate check on", {a: [1,1,1]}, {a:{type:"array", noDuplicates: true}}, true);
+doResultCheck("No duplicates, duplicate removal off", {a: [1,2,3]}, {a:{type:"array"}}, {a:[1,2,3]});
+doResultCheck("Duplicates, duplicate removal off", {a: [1,1,1]}, {a:{type:"array"}}, {a:[1,1,1]});
+doResultCheck("No duplicates, duplicate removal on", {a: [1,2,3]}, {a:{type:"array", removeDuplicates: true}}, {a:[1,2,3]});
+doResultCheck("Duplicates, duplicate removal on", {a: [1,1,1]}, {a:{type:"array", removeDuplicates: true}}, {a:[1]});
+doCheck("Duplicate Strings", {a: ["a", "a", "b"]}, {a:{type:"array", noDuplicates: true}}, true);
+doCheck("Strings, no duplicates", {a: ["a", "c", "b"]}, {a:{type:"array", noDuplicates: true}});
+doCheck("Duplicate Objects", {a: [{a:1}, {a:1}, {a:2}]}, {a:{type:"array", noDuplicates: true}}, true);
+doCheck("Objects, no duplicates", {a: [{a:1}, {a:2}]}, {a:{type:"array", noDuplicates: true}});
+doCheck("Duplicate Nested Objects", {a: [{a:{b:1}}, {a:{b:1}}, {a:{b:2}}]}, {a:{type:"array", noDuplicates: true}}, true);
+doCheck("Nested Objects, no duplicates", {a: [{a:{b:1}}, {a:{b:2}}]}, {a:{type:"array", noDuplicates: true}});
 
 console.log("\n=== Default ===");
 doResultCheck("Undefined, use default", {}, {a:{type:"integer", default:1}}, {a:1});

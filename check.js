@@ -1,4 +1,4 @@
-const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision", "default", "replaceNull"]
+const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision", "default", "replaceNull", "noDuplicates", "removeDuplicates"]
 
 function isNumber(num) {
     return !isNaN(parseFloat(num)) && !isNaN(num) && !(num - 1 === num);
@@ -22,7 +22,7 @@ function checkPatternKeys(pattern) {
 function compareValues(o1, o2) {
 	if(typeof o1 !== typeof o2)
 		return false;
-	if(typeof o1 !== "object")
+	if(typeof o1 !== "object" || o1 === null || o2 === null)
 		return o1 === o2;
 	return compareObject(o1, o2);
 }
@@ -57,6 +57,22 @@ function check(input, res, pattern, callback = null) {
 		return true;
 	}
 	return false;
+}
+
+function uniq(a) {
+	let u = [];
+	for(let val of a) {
+		let unique = true;
+		for(let cmp of u) {
+			if(compareValues(val, cmp)) {
+				unique = false;
+				break;
+			}
+		}
+		if(unique)
+			u.push(val);
+	}
+	return u;
 }
 
 function validate(input, pattern, globalInput = null) {
@@ -165,6 +181,15 @@ function validate(input, pattern, globalInput = null) {
 							results[key] = { error: "Value contains too many items." };
 							return;
 						}
+					}
+					if(vPattern.noDuplicates || vPattern.removeDuplicates) {
+						let uniqueValues = uniq(value);
+						if(vPattern.noDuplicates && uniqueValues.length !== value.length) {
+							results[key] = { error: "Value contains duplicates." };
+							return;
+						}
+						if(vPattern.removeDuplicates)
+							input[key] = uniqueValues;
 					}
 					break;
 				case "object":
