@@ -1,4 +1,4 @@
-const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision", "default"]
+const patternKeys = ["type", "required", "requiredIf", "allowNull", "possibleValues", "pattern", "minLength", "maxLength", "fixedLength", "regex", "regexFlags", "allowTimestamp", "min", "max", "precision", "default", "replaceNull"]
 
 function isNumber(num) {
     return !isNaN(parseFloat(num)) && !isNaN(num) && !(num - 1 === num);
@@ -92,14 +92,14 @@ function validate(input, pattern, globalInput = null) {
 			}
 		} else if (!isSpecified(input[key])) {
 			if (input[key] === null && vPattern.allowNull) {
-				if(Object.keys(vPattern).includes("default"))
+				if((input[key] === undefined || vPattern.replaceNull) && Object.keys(vPattern).includes("default"))
 					input[key] = vPattern.default;
 				return;
 			}
 			if (vPattern.required) {
 				results[key] = { ok: false, error: "Required attribute not specified." };
 			}
-			if(Object.keys(vPattern).includes("default"))
+			if((input[key] === undefined || vPattern.replaceNull) && Object.keys(vPattern).includes("default"))
 				input[key] = vPattern.default;
 			return;
 		}

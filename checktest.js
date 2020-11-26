@@ -216,8 +216,13 @@ doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", 
 doCheck("Object, invalid - different key amount", {a:{a:1}}, {a:{type:"object", possibleValues:[{a:1, b:1}]}}, true);
 
 console.log("\n=== Default ===");
-doResultCheck("Basic, use default", {a: null}, {a:{type:"integer", default:1}}, {a:1});
-doResultCheck("Basic, don't use default", {a: 2}, {a:{type:"integer", default:1}}, {a:2});
+doResultCheck("Undefined, use default", {}, {a:{type:"integer", default:1}}, {a:1});
+doResultCheck("Defined, don't use default", {a: 2}, {a:{type:"integer", default:1}}, {a:2});
+doResultCheck("Null, use default", {a: null}, {a:{type:"integer", default:1, replaceNull: true}}, {a:1});
+doResultCheck("Null, don't use default", {a: null}, {a:{type:"integer", default:1}}, {a:null});
+doResultCheck("Null, explicitly don't use default", {a: null}, {a:{type:"integer", default:1, replaceNull: false}}, {a:null});
+doResultCheck("Undefined, replaceNull activated", {}, {a:{type:"integer", default:1, replaceNull: true}}, {a:1});
+doResultCheck("Undefined, replaceNull deactivated", {}, {a:{type:"integer", default:1, replaceNull: false}}, {a:1});
 
 console.log("\n=== Syntax Errors ===");
 doExceptionCheck("null arguments", null, null, true, "InvalidArgumentsException");

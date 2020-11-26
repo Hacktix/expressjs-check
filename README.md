@@ -47,7 +47,9 @@ Not-required values can be set to a specified default value by using the `defaul
 
 `{ a: { type:"number", default: 5 } }`
 
-The example above would insert the value `5` in the `a` key of the input object if it initially contained `null` or `undefined`. If a value is provided in the input all checks are still run as normal and the original value is not overwritten.
+The example above would insert the value `5` in the `a` key of the input object if it was initially undefined. If a value is provided in the input all checks are still run as normal and the original value is not overwritten.
+
+`null` is, by default, not treated as an undefined value. In order to replace `null` values with the default values as well, the `replaceNull` attribute must be set to `true`.
 
 ### List of Valid Parameters
 A pattern can contain a list of valid parameters in form of an array. The following is a pattern which would allow the property `a` of the input object to be one of the numbers `1`, `1.5` or `2`:
