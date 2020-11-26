@@ -14,7 +14,7 @@ function checkPatternKeys(pattern) {
 			console.log("[WARNING : expressjs-check] Encountered unknown key '" + key + "' in check pattern. Possibly a typo?");
 		}
 	});
-	if(isSpecified(pattern.required) && pattern.required === true && Object.keys(pattern).includes("default")) {
+	if(pattern.required && Object.keys(pattern).includes("default")) {
 		console.log("[WARNING : expressjs-check] Default value provided for required parameter - Default value will never be used.");
 	}
 }
