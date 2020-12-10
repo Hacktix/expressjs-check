@@ -267,5 +267,9 @@ doCheck("null data, filled pattern", null, {a:{type:"string", required:true}}, t
 doCheck("null data type", {a:1}, {a:{type:null}});
 doExceptionCheck("invalid data type", {a:1}, {a:{type:"something"}}, true, "InvalidArgumentsException");
 
+doCheck("requiredIf property undefined, not required", {b:2}, {a: {type:"number", requiredIf:"#b === undefined"}});
+doCheck("requiredIf property undefined, required, not provided", {}, {a: {type:"number", requiredIf:"#b === undefined"}}, true);
+doCheck("requiredIf property undefined, required, provided", {a:2}, {a: {type:"number", requiredIf:"#b === undefined"}});
+
 console.log("\n=== Results ===");
 console.log("Passed ".white + passed.toString().brightGreen + " out of ".white + checks.toString().brightGreen + " (".white + ((Math.floor((passed/checks)*10000)/100) + "%").brightGreen + ")\n".white);

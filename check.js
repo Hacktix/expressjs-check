@@ -94,7 +94,7 @@ function validate(input, pattern, globalInput = null) {
 					if(Object.getOwnPropertyDescriptor(globalInput, varname) !== undefined && typeof Object.getOwnPropertyDescriptor(globalInput, varname).value !== "function" && Object.getOwnPropertyDescriptor(globalInput, varname).get === undefined)
 						parsed += "globalInput['" + varname + "']";
 					else
-						parsed += "false";
+						parsed += "undefined";
 				}
 				else parsed += c;
 			}
