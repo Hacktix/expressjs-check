@@ -12,7 +12,7 @@
   },
   "author": "Hacktix",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "colors": "^1.4.0"
   }
 }
